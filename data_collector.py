@@ -4,7 +4,9 @@ from matplotlib import pyplot as plt
 import mediapipe as mp
 import cv2
 import time
+import json
 import numpy as np
+
 
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
@@ -19,7 +21,7 @@ def mediapipe_detection(image, model):
 
 def draw_styled_landmarks(image, results):
     # Draw face connections
-    mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACE_CONNECTIONS,
+    mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACEMESH_TESSELATION,
                              mp_drawing.DrawingSpec(color=(80,110,10), thickness=1, circle_radius=1),
                              mp_drawing.DrawingSpec(color=(80,256,121), thickness=1, circle_radius=1)
                              )
@@ -53,15 +55,7 @@ def extract_keypoints(results):
 DATA_PATH = os.path.join('MP_Data')
 
 # Actions that we try to detect
-actions = np.array([
-            'hello', 'thanks', 'iloveyou', 'Help', 'All Done', 'Please',
-            'More', 'Good', 'Happy', 'Sad', 'Sleep', 'Drink', 'Eat', 'Cheese',
-            'Cookie', 'Spoon', 'Apple', 'Bed', 'Blanket', 'Diaper', 'Music',
-            'Book', 'Doll', 'Balloon', 'Hat', 'Jacket', 'Pacifier', 'Mommy',
-            'Daddy', 'Grandma', 'Grandpa', 'Brother', 'Sister', 'Baby', 'Rain',
-            'Cat', 'Dog', 'House', 'Store', 'Car', 'Stroller', 'Hug', 'kiss', 'Cold', 'Pain'
-            'open', 'close', 'cry', 'play', 'stop', 'go', 'laugh'
-            ])
+actions = np.array(json.load(open("labels/actions.json", "r")))
 
 alphabet = np.array([
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
